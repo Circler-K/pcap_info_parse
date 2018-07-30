@@ -15,9 +15,9 @@ int main(int argc, char* argv[]) {
     usage();
     return -1;
   }
-  struct ip *ip_head;
-  struct ether_header *eth;
-  struct tcphdr *tcp;
+  struct ip *ip_packet_handler;
+  struct ether_header *eth_packet_handler;
+  struct tcphdr *tcp_packet_handler;
   int datasize;
   char* dev = argv[1];
   char errbuf[PCAP_ERRBUF_SIZE];
@@ -35,11 +35,11 @@ int main(int argc, char* argv[]) {
     if (res == 0) continue;
     if (res == -1 || res == -2) break;
 
-    eth = (struct ether_header *)packet;
+    eth_packet_handler = (struct ether_header *)packet;
     packet+=sizeof(struct ether_header);
-    printf("============================================\n");
+    printf("====================================\n");
     for(i=0;i<6;++i){
-    	printf("%x",eth->ether_shost[i]);
+    	printf("%x",eth_packet_handler->ether_shost[i]);
     	if (i!=5){
     		printf(":");
     	}
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
     	}
     }
     for(i=0;i<6;++i){
-    	printf("%x",eth->ether_dhost[i]);
+    	printf("%x",eth_packet_handler->ether_dhost[i]);
     	if (i!=5){
     		printf(":");
     	}
@@ -60,41 +60,41 @@ int main(int argc, char* argv[]) {
     }
 
 	
-    printf("ether_type = 0x%X\n",eth->ether_type);
-    if( eth->ether_type != 0x08 )
+    printf("ether_type = 0x%X\n",eth_packet_handler->ether_type);
+    if( eth_packet_handler->ether_type != 0x08 )
     {
-	printf("============================================\n");
+	printf("====================================\n");
 	continue;
     }
 	
 
-    ip_head = (struct ip *)packet;
-    packet += ip_head->ip_hl * 4;
+    ip_packet_handler = (struct ip *)packet;
+    packet += ip_packet_handler->ip_hl * 4;
 
     
-    char *addr_src_ip = inet_ntoa(ip_head->ip_src);   
-    char *addr_dst_ip = inet_ntoa(ip_head->ip_dst);
+    char *addr_src_ip = inet_ntoa(ip_packet_handler->ip_src);   
+    char *addr_dst_ip = inet_ntoa(ip_packet_handler->ip_dst);
     puts(addr_src_ip); 
     puts(addr_dst_ip);
 
 
-    printf("ip_protocol = 0x%X \n",ip_head->ip_p);
-    if( ip_head->ip_p != 6 )    
+    printf("ip_protocol = 0x%X \n",ip_packet_handler->ip_p);
+    if( ip_packet_handler->ip_p != 6 )    
     {
-	printf("============================================\n");
+	printf("====================================\n");
 	continue;
     }
 
 
-    tcp = (struct tcphdr *)packet;
-    packet += tcp->th_off * 4;
+    tcp_packet_handler = (struct tcphdr *)packet;
+    packet += tcp_packet_handler->th_off * 4;
 
-    datasize = (int)(ip_head->ip_len) - (ip_head->ip_hl * 4 + tcp->th_off * 4) ;
-    printf("srcport : %hu\ndstport : %hu\n\n",htons(tcp->th_sport),htons(tcp->th_dport));
+    datasize = (int)(ip_packet_handler->ip_len) - (ip_packet_handler->ip_hl * 4 + tcp_packet_handler->th_off * 4) ;
+    printf("srcport : %hu\ndstport : %hu\n\n",htons(tcp_packet_handler->th_sport),htons(tcp_packet_handler->th_dport));
     for(int i = 0;i< datasize; i++ )
 	    putchar(packet[i]);
 
-    printf("============================================\n");
+    printf("====================================\n");
 
  }
 
