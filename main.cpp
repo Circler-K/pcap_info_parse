@@ -73,8 +73,8 @@ int main(int argc, char* argv[]) {
 
     
     char *addr_src_ip = inet_ntoa(ip_packet_handler->ip_src);   
+    puts(addr_src_ip);
     char *addr_dst_ip = inet_ntoa(ip_packet_handler->ip_dst);
-    puts(addr_src_ip); 
     puts(addr_dst_ip);
 
 
