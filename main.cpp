@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
     eth_packet_handler = (struct ether_header *)packet;
     packet+=sizeof(struct ether_header);
-    printf("====================================\n");
+    printf("====================================\nS : ");
     for(i=0;i<6;++i){
     	printf("%x",eth_packet_handler->ether_shost[i]);
     	if (i!=5){
@@ -48,6 +48,7 @@ int main(int argc, char* argv[]) {
     		break;
     	}
     }
+    printf("D : ");
     for(i=0;i<6;++i){
     	printf("%x",eth_packet_handler->ether_dhost[i]);
     	if (i!=5){
@@ -73,8 +74,10 @@ int main(int argc, char* argv[]) {
 
     
     char *addr_src_ip = inet_ntoa(ip_packet_handler->ip_src);   
+    printf("addr_src_ip :");
     puts(addr_src_ip);
     char *addr_dst_ip = inet_ntoa(ip_packet_handler->ip_dst);
+    printf("addr_dst_ip : ");
     puts(addr_dst_ip);
 
 
