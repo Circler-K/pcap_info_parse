@@ -95,9 +95,8 @@ int main(int argc, char* argv[]) {
     datasize = (int)(ip_packet_handler->ip_len) - (ip_packet_handler->ip_hl * 4 + tcp_packet_handler->th_off * 4) ;
     printf("srcport : %hu\ndstport : %hu\n\n",htons(tcp_packet_handler->th_sport),htons(tcp_packet_handler->th_dport));
     printf("datasize : %d\n",datasize);
-    for(int i = 0;i< 16/*datasize*/; i++ ){
+    for(int i = 0;i< 16; i++ ){
 	    printf("\\x%x ",packet[i]);
-	    //putchar(packet[i]);
     }
     puts("");
     printf("====================================\n");
